@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget,QVBoxLayout,QLabel,QPushButton,QMessageBox,QDialog,QWidget,QApplication
+from PyQt6.QtWidgets import QWidget,QVBoxLayout,QLabel,QPushButton,QMessageBox,QDialog,QWidget,QApplication,QScrollArea,QTableWidget,QTableWidgetItem
 from PyQt6.QtGui import QFont,QMovie
 from PyQt6.QtCore import QSize,Qt
 
@@ -38,8 +38,9 @@ class HelperClass():
         return [widget,labelWarn]
 
     @classmethod
-    def ProducePushBut(cls,self,butText:str,connectFunc:ty.Callable[[],None],height=30,argsConnectFunc = []) -> QPushButton:
-        but = QPushButton(butText,self)
+    def ProducePushBut(cls,butText:str,connectFunc:ty.Callable[[],None],height=30,argsConnectFunc = [],self = None) -> QPushButton:
+        if self !=None: but = QPushButton(butText,self)
+        else: but = QPushButton(butText)
         but.clicked.connect(pars(connectFunc,but,*argsConnectFunc))
         but.setMinimumHeight(height)
         return but
@@ -83,7 +84,33 @@ class HelperClass():
     def setButEnabled(cls,text:str,but:QPushButton):
         but.setText(text)
         but.setEnabled(True)
-    
 
+    @classmethod
+    def produceLabels(cls,labelConstraints:ty.List[ty.Tuple[ty.Literal["Type"],ty.Literal["Contents"],ty.Union[ty.Literal["styles"] ,None]]],self = None,wrapLabel:bool=True,labelHight:int = 0) -> ty.List[QLabel]:
+        labels = []
+        for i in labelConstraints:
+            if i[0] == "text":
+                if(self != None):label = QLabel(self)
+                else:label = QLabel()
+                if labelHight !=0: label.setFixedHeight(labelHight)
+                label.setWordWrap(wrapLabel)
+                label.setText(i[1])
+                if i[2] != None : label.setStyleSheet(i[2])
+                labels = [*labels, label]
+        return labels
+
+    @classmethod
+    def ProduceScrollArea(cls,h:int = 400) -> QScrollArea:
+        scrollArea = QScrollArea()
+        scrollArea.setWidgetResizable(True)
+        scrollArea.setFixedHeight(h)
+        return scrollArea
+
+    @classmethod
+    def FillTable(cls,tableWidget:QTableWidget,arr:ty.List,columnNo,propName:str,startRowNo:int):
+        rowNo = startRowNo
+        for i in arr:
+            tableWidget.setItem(rowNo,columnNo,QTableWidgetItem(str(i[propName])))
+            rowNo = rowNo + 1
 if __name__ == "__main__":
     HelperClass()
