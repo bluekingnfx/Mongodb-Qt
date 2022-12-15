@@ -56,7 +56,7 @@ class MongoDbAssignment(QMainWindow):
     def mainWindow(self):
         self.setWindowTitle("Assignment 2")
         self.setMinimumSize(QSize(400,500))
-        self.setWindowIcon(QIcon(self.rootFol + "/data/calendar-assignment-icon_118813-1085.jpg"))
+        self.setWindowIcon(QIcon(self.rootFol +"_roots/data/calendar-assignment-icon_118813-1085.jpg"))
         cusMenu = self.menuBar()
         AppBox = cusMenu.addMenu("App")
         exitAction = QAction("Exit",self)
