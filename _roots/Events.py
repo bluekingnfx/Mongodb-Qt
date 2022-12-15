@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QLabel,QLineEdit,QStackedWidget,QPushButton,QWidget,
 from pymongo import MongoClient,collection
 from random import randint
 import json
-
+import typing as ty
 
 from HelperClass import HelperClass
 from DataBaseConnClass import DatabaseConnection
@@ -27,6 +27,7 @@ class AcceptUrlConnectEvents():
             
             if "classroom" in client.list_database_names():
                 db = client.classroom
+                self.classRoomPath = db
                 if "students" in db.list_collection_names():
                     self.dbPathToStudents = db.students
                     self.connectedUrl = {
@@ -74,20 +75,34 @@ class AcceptUrlConnectEvents():
             HelperClass.setButEnabled("Connect",but)
         
     @classmethod
-    def fetchSampleDoc(cls,but,selfMain,VLay:QVBoxLayout):
-        dBPath:collection.Collection = selfMain.dbPathToStudents
-        no = randint(1,200)
+    def fetchSampleDoc(cls,but,selfMain,VLay:QVBoxLayout,collection = None, specificId:ty.Union[int,None] = None,heightOfLabel:int = 500):
+        """
+            specific id must be an integer, like _id:0, should not be objectId.
+        """
+        dBPath:collection.Collection
+        if collection != None:
+            dBPath = collection
+            if specificId == None: raise Exception("No specific but collection is different.")
+            no = specificId
+        else:
+            dBPath = selfMain.dbPathToStudents
+            no = randint(1,200)
+        
         try:
             item = dBPath.find_one({
                 "_id":no
             })
 
             js = json.dumps(item,ensure_ascii=False,indent=4)
-            label, = HelperClass.produceLabels([("text",js,"font-size:16px;border:1px solid #333;border-radius:4px")],None,True,500)
+            label, = HelperClass.produceLabels([("text",js,"font-size:16px;border:1px solid #333;border-radius:4px")],None,True,heightOfLabel)
             label.setFixedWidth(300)
             VLay.addWidget(label)
 
         except Exception as E:
-            print(E)
+            try:
+                err = str(E)
+                HelperClass.ProduceMessageBox(selfMain,"about","Error!",f"Enable to complete the operation. Possible fixed: Check the connection, Problem persists try to exits the app or clear the database and recreate it. Code Error:{err}")
+            except:
+                HelperClass.ProduceMessageBox(selfMain,"about","Error!","Enable to complete the operation. Possible fixed: Check the connection, Problem persists try to exits the app or clear the database and recreate it.")
             
                 

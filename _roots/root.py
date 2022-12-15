@@ -27,9 +27,16 @@ class MongoDbAssignment(QMainWindow):
         mWid = QWidget()
         mVLay = QVBoxLayout()
         MainStack = self.AcceptUrlNConnect(mVLay)
+
+        #!methods that implements questions (sorted:ASCENDING).
         self.FindHighest(MainStack)
         self.FindBelowAvg(MainStack)
         self.AssignPassOrFail(MainStack)
+        self.SummaryCollection(MainStack)
+        self.PassOrFailByAvgCombined(MainStack)
+        self.FailedInAll(MainStack)
+        self.PassedInAll(MainStack)
+
         mWid.setLayout(mVLay)
         self.setCentralWidget(mWid)
         self.show()
@@ -111,7 +118,9 @@ class MongoDbAssignment(QMainWindow):
         return widget
 
     def FindBelowAvg(self,MainStackWidget:QStackedWidget):
-        """ Find students who scored below average in the exam and pass mark is 40%? """
+        """ 
+            ?Find students who scored below average in the exam and pass mark is 40%? 
+        """
         scrollArea = HelperClass.ProduceScrollArea()
         widget = QWidget()
         vLay = QVBoxLayout(widget)
@@ -135,7 +144,7 @@ class MongoDbAssignment(QMainWindow):
 
         butContainer = QWidget()
         HLayBut = QHBoxLayout()
-        butToFetch = HelperClass.ProducePushBut("Fetch document",AcceptUrlConnectEvents.fetchSampleDoc,30,[self,vLay])
+        butToFetch = HelperClass.ProducePushBut("Fetch document",AcceptUrlConnectEvents.fetchSampleDoc,30,[self,vLay,None])
         but = HelperClass.ProducePushBut("Assign status",Queries.InDb3,30,[self,butToFetch])
         HLayBut.addWidget(but)
         HLayBut.addWidget(butToFetch)
@@ -148,9 +157,63 @@ class MongoDbAssignment(QMainWindow):
         scrollArea.setWidget(widget)
         mainStackWidget.addWidget(scrollArea)
 
+    def SummaryCollection(self,MainStackWidget:QStackedWidget):
+        """ 
+            ?Find the total and average of the exam, quiz and homework and store them in a separate collection.
+        """
+        scrollArea = HelperClass.ProduceScrollArea()
+        widget = QWidget()
+        vLay = QVBoxLayout(widget)
+        desNHeading,_ = HelperClass.HeadingNDes("4) Find the total and average of the exam, quiz and homework and store them in a separate collection.","Query:db.collection.aggregate([{'$project':{'_id':0,'exam':{'$arrayElemAt':['$scores',0]}},(...quiz and homework)},{'$group':{'_id':0,'examTotal':{'$sum':'$exam.scores'},examAvg:{'$avg':'$exam.scores'},(...quiz and homeWork)}},{$out:'summary'+ Date.now()}])",420,380,400,200)
+        vLay.addWidget(desNHeading)
+        but = HelperClass.ProducePushBut("Create Summary Collection",Queries.InDb4,30,[self,vLay])
+        vLay.addWidget(but)
+        widget.setMaximumWidth(410)
+        scrollArea.setWidget(widget)
+        MainStackWidget.addWidget(scrollArea)
     
+    def PassOrFailByAvgCombined(self,MainStackWidget:QStackedWidget):
+        """ 
+            ?Create a new collection which consists of students who scored below average and above 40% in all the categories.
+        """
+        scrollArea = HelperClass.ProduceScrollArea()
+        widget = QWidget()
+        vLay = QVBoxLayout(widget)
+        desNHeading,_ = HelperClass.HeadingNDes("5) Create a new collection which consists of students who scored below average and above 40 percent in all the categories.","Query:db.collection.aggregate([{$set:{'averageCombined':{'$reduce':{'input':'$scores',initialValue:0,in:{'$add':['$$value','$$this.score']}}}}},{'$match':{'averageCombined':{'$gte':40}}},{'$set':{'averageCombined':{'$divide':['$averageCombined',3]}}},{'$out':'PassedByAverageAllCatagories'+Date.now()}]) same for FailedCollection but the $match based on $lt 40.",480,400,420,200)
+        vLay.addWidget(desNHeading)
+        but = HelperClass.ProducePushBut("Create Collection for below and above average.",Queries.InDb5,30,[self,vLay])
+        vLay.addWidget(but)
+        widget.setMaximumWidth(430)
+        scrollArea.setWidget(widget)
+        MainStackWidget.addWidget(scrollArea)
+        
+    def PassedInAll(self,MainStackWidget:QStackedWidget):
+        """ 
+        ?Create a new collection which consists of students who scored above pass mark in all the categories.
+        """
+        scrollArea = HelperClass.ProduceScrollArea()
+        widget = QWidget()
+        vLay = QVBoxLayout(widget)
+        desNHeading,_ = HelperClass.HeadingNDes("7) Create a new collection which consists of students who scored above pass mark in all the categories.","Query:db.collection.aggregate([{'$match':{'$and':[{'scores.0.score':{$gte:40}},(...same for 1 and 2)]}}]) and some optimization",0,350,350,150)
+        vLay.addWidget(desNHeading)
+        but = HelperClass.ProducePushBut("Create Passed all",Queries.InDb7,30,[self,vLay,widget])
+        vLay.addWidget(but)
+        scrollArea.setWidget(widget)
+        MainStackWidget.addWidget(scrollArea)
 
-
+    def FailedInAll(self,MainStackWidget:QStackedWidget):
+        """ 
+        ?Create a new collection which consists of students who scored below the fail mark in all the categories
+        """
+        scrollArea = HelperClass.ProduceScrollArea()
+        widget = QWidget()
+        vLay = QVBoxLayout(widget)
+        desNHeading,_ = HelperClass.HeadingNDes("6) Create a new collection which consists of students who scored below the fail mark in all the categories","Query:db.collection.aggregate([{'$match':{'$and':[{'scores.0.score':{$lt:40}},(...same for 1 and 2)]}}]) and some optimization",0,350,350,150)
+        vLay.addWidget(desNHeading)
+        but = HelperClass.ProducePushBut("Create Failed all",Queries.InDb6,30,[self,vLay,widget])
+        vLay.addWidget(but)
+        scrollArea.setWidget(widget)
+        MainStackWidget.addWidget(scrollArea)
 
 
 
