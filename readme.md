@@ -7,7 +7,7 @@ Install typing module to avoid run time failures if you are below 3.5.
 
 ### Altering the source code. Steps as follows.
 1) Open the command prompt or the shell depending upon your os.
-2) Copy and run the following command ``pip install -r requirements.txt`` in the shell or cmd.
+2) Copy and run the following command ``pip install -r requirements.txt`` from MongoDb-Qt as root folder in the shell or cmd.
 3) If it is not successfully installed run ``pip install pymongo PyQt6``.
 4) Once installed, you need to run the **_roots/root.py** has it is the main file where Qt application starts.
 5) You should potentially see a GUI, follow the instructions as per GUI. Process will be explained below.
