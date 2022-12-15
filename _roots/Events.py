@@ -4,6 +4,7 @@ from pymongo import MongoClient,collection
 from random import randint
 import json
 import typing as ty
+from pathlib import Path
 
 from HelperClass import HelperClass
 from DataBaseConnClass import DatabaseConnection
@@ -67,7 +68,10 @@ class AcceptUrlConnectEvents():
                     title = "Connected but No collection"
                     des = "Connected but there is no students collection. Press ok to automatically create the collection with records,or cancel, so you can manually create the collection in the database classroom and import students.json"
                 
-                HelperClass.ProduceMessageBox(self,"question",title,des,DatabaseConnection.createAndUploadTheFile,None,[self.connectedInfo["client"],self.rootFol+"_roots/data/students.json",self,self.connectedInfo],[],True)
+                path = str(Path(__file__).parent).replace("\\","/")+"/data/students.json"
+                
+
+                HelperClass.ProduceMessageBox(self,"question",title,des,DatabaseConnection.createAndUploadTheFile,None,[self.connectedInfo["client"],path,self,self.connectedInfo],[],True)
             
             else:
                 HelperClass.ProduceMessageBox(self,"about","Error","Unable to connect to the client. Possible fixes: Check the mongo url, see if the database is up.")
