@@ -27,14 +27,14 @@ The app is made to solve the problem statement from the file `Problem Statement.
 
 #### Home window
 <p>
-    <img src="./readMeImages/Screenshot1.jpg" alt="mainPage" width="300"/>
+    <img src="/readMeImages/Screenshot1.jpg" alt="mainPage" />
 </p>
 
 - In Home window, you need to enter a cluster url of the atlas client.
 - Once entered, Click connect - There will prompt appear as in the following image.
 
 <p>
-    <img src="./readMeImages/Screenshot 2.jpg" alt="mainPage" width="300"/>
+    <img src="/readMeImages/Screenshot 2.jpg" alt="mainPage" />
 </p>
 
 - ***Make sure connected database does not have classroom collection, unless the classroom collection is created by the app. There will be problem of overwriting, I am not responsible for any collection drop, no liabilities upon me cause I warned you, now.***
@@ -43,7 +43,7 @@ The app is made to solve the problem statement from the file `Problem Statement.
 - Now again, click connect you will be moved to new gui with navigation buttons like the following image.
 
 <p>
-    <img src="./readMeImages/Screenshot3.jpg" alt="mainPage" width="300"/>
+    <img src="/readMeImages/Screenshot3.jpg" alt="mainPage"/>
 </p>
 
 - The Bold font describes the question from Problem statement Pdf.
