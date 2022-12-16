@@ -26,25 +26,21 @@ The app is made to solve the problem statement from the file `Problem Statement.
 ### Workings of the code.
 
 #### Home window
-<p>
-    <img src="/readMeImages/Screenshot1.jpg" alt="mainPage" />
-</p>
+
+![Screenshot1](/readMeImages/Screenshot1.jpg)
+
 
 - In Home window, you need to enter a cluster url of the atlas client.
 - Once entered, Click connect - There will prompt appear as in the following image.
 
-<p>
-    <img src="/readMeImages/Screenshot 2.jpg" alt="mainPage" />
-</p>
+![ScreenShot2](/readMeImages/Screenshot 2.jpg)
 
 - ***Make sure connected database does not have classroom collection, unless the classroom collection is created by the app. There will be problem of overwriting, I am not responsible for any collection drop, no liabilities upon me cause I warned you, now.***
 
 - Once you pressed ok, there will be prompt notifying you **Inserted the documents**. 
 - Now again, click connect you will be moved to new gui with navigation buttons like the following image.
 
-<p>
-    <img src="/readMeImages/Screenshot3.jpg" alt="mainPage"/>
-</p>
+![Screenshot3](/readMeImages/Screenshot3.jpg)
 
 - The Bold font describes the question from Problem statement Pdf.
 - Next, Lesser contrast to previous describes the query that will be performed. **All the queries with explanation will be given in Queries and Elaboration section**.
